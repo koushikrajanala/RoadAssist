@@ -1,0 +1,970 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#111827">
+<title>RoadAssist | Roadside Assistance</title>
+<link rel="stylesheet"
+ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+<style>
+:root {
+  --primary: #facc15;
+  --dark: #111827;
+  --muted: #64748b;
+  --bg: #f4f6fa;
+  --white: #fff;
+  --green: #15803d;
+  --red: #dc2626;
+  --border: #e5e7eb;
+  --shadow: 0 8px 28px rgba(15,23,42,.06);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; font-family: "Segoe UI", Arial, sans-serif;
+  color: var(--dark); background: var(--bg); line-height: 1.6;
+}
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+button:focus-visible, input:focus-visible, select:focus-visible {
+  outline: 3px solid #93c5fd; outline-offset: 2px;
+}
+.topbar {
+  background: var(--dark); color: white; min-height: 72px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px max(5%, calc((100% - 1200px)/2)); gap: 18px;
+  position: sticky; top: 0; z-index: 10;
+}
+.brand { font-size: 1.35rem; font-weight: 800; color: var(--primary); }
+.brand i { margin-right: 8px; }
+.top-actions { display: flex; align-items: center; gap: 10px; }
+.user-label { font-size: .9rem; color: #d1d5db; }
+.btn {
+  border: 0; border-radius: 9px; padding: 11px 16px;
+  font-weight: 700; transition: .2s; display: inline-flex;
+  align-items: center; justify-content: center; gap: 8px;
+}
+.btn:hover { transform: translateY(-1px); }
+.btn-primary { background: var(--primary); color: var(--dark); }
+.btn-dark { background: var(--dark); color: white; }
+.btn-outline { border: 1px solid #64748b; background: transparent; color: inherit; }
+.btn-danger { background: var(--red); color: white; }
+.btn-light { background: #f1f5f9; color: var(--dark); }
+.btn-small { padding: 7px 10px; font-size: .85rem; }
+main { max-width: 1200px; margin: 0 auto; padding: 30px 22px 55px; }
+.hero {
+  background: linear-gradient(120deg,#111827,#263449);
+  color: white; border-radius: 20px; padding: 34px;
+  display: grid; grid-template-columns: 1.5fr 1fr;
+  align-items: center; gap: 25px; box-shadow: var(--shadow);
+}
+.eyebrow { color: #ca8a04; font-size: .78rem; font-weight: 800; letter-spacing: 2px; }
+.hero .eyebrow { color: var(--primary); }
+h1 { font-size: clamp(1.9rem,4vw,3rem); line-height: 1.15; margin: 10px 0 14px; }
+.hero p { color: #d1d5db; max-width: 600px; }
+.hero-visual { text-align: center; font-size: 6rem; color: var(--primary); }
+.hero-visual small { display: block; font-size: .9rem; color: #d1d5db; }
+.section { margin-top: 32px; }
+.section-heading {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px; margin-bottom: 16px;
+}
+.section-heading h2 { margin: 0; font-size: 1.35rem; }
+.muted { color: var(--muted); }
+.small { font-size: .86rem; }
+.grid { display: grid; gap: 16px; }
+.stats { grid-template-columns: repeat(3,minmax(0,1fr)); margin-top: 22px; }
+.card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 15px; padding: 21px; box-shadow: var(--shadow);
+  min-width: 0;
+}
+.stat-value { font-size: 1.8rem; font-weight: 800; margin-top: 5px; }
+.stat-icon {
+  display: inline-grid; place-items: center; width: 42px; height: 42px;
+  border-radius: 12px; background: #fef3c7; color: #92400e;
+}
+.services { grid-template-columns: repeat(4,minmax(0,1fr)); }
+.service {
+  text-align: left; border: 1px solid var(--border); background: white;
+  border-radius: 15px; padding: 21px; box-shadow: var(--shadow);
+  transition: .2s; color: var(--dark);
+}
+.service:hover { border-color: #eab308; transform: translateY(-3px); }
+.service .stat-icon { margin-bottom: 12px; }
+.service strong { display: block; font-size: 1.02rem; }
+.service p { color: var(--muted); font-size: .85rem; margin: 5px 0 0; }
+.sos-panel {
+  display: grid; grid-template-columns: 1fr auto; align-items: center;
+  gap: 22px; border: 1px solid #fecaca; background: #fff7f7;
+}
+.sos-panel h2 { margin: 0 0 5px; }
+.sos-button {
+  width: 125px; height: 125px; border-radius: 50%;
+  border: 8px solid #fee2e2; background: var(--red); color: white;
+  font-size: 1.8rem; font-weight: 900; box-shadow: 0 0 0 5px #fecaca;
+}
+.sos-button:hover { background: #b91c1c; }
+.location-line { margin-top: 12px; color: var(--muted); font-size: .9rem; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.field { margin-bottom: 13px; }
+.field label { display: block; font-size: .9rem; font-weight: 700; margin-bottom: 5px; }
+.field input, .field select, .field textarea, .toolbar input, .toolbar select {
+  width: 100%; border: 1px solid #cbd5e1; background: white;
+  border-radius: 8px; padding: 11px 12px; color: var(--dark);
+}
+.field textarea { min-height: 85px; resize: vertical; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 10px; }
+.toolbar input { flex: 1; min-width: 160px; }
+.toolbar select { width: auto; min-width: 140px; }
+.table-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; min-width: 650px; }
+th, td { text-align: left; padding: 13px 12px; border-bottom: 1px solid var(--border); }
+th { font-size: .8rem; color: var(--muted); text-transform: uppercase; }
+td { font-size: .9rem; }
+.status {
+  display: inline-block; padding: 4px 9px; border-radius: 20px;
+  background: #e0f2fe; color: #075985; font-size: .77rem; font-weight: 800;
+}
+.status.cancelled { background: #fee2e2; color: #991b1b; }
+.status.completed { background: #dcfce7; color: #166534; }
+.empty { text-align: center; padding: 28px; color: var(--muted); }
+.contact-list { display: grid; gap: 10px; }
+.contact-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; padding: 12px; border: 1px solid var(--border); border-radius: 10px;
+}
+.contact-row p { margin: 2px 0 0; color: var(--muted); font-size: .88rem; }
+.footer { text-align: center; padding: 22px; color: var(--muted); font-size: .85rem; }
+.notice {
+  padding: 12px 14px; border-radius: 9px; background: #eff6ff;
+  color: #1e40af; font-size: .88rem; margin-top: 12px;
+}
+.hidden { display: none !important; }
+.modal {
+  position: fixed; inset: 0; background: rgba(15,23,42,.7);
+  z-index: 50; display: flex; align-items: center; justify-content: center;
+  padding: 18px; overflow-y: auto;
+}
+.modal-box {
+  width: 100%; max-width: 460px; max-height: 92vh; overflow-y: auto;
+  background: white; padding: 25px; border-radius: 17px; box-shadow: var(--shadow);
+}
+.modal-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.modal-head h2 { margin: 0 0 16px; }
+.close-btn { border: 0; background: #f1f5f9; border-radius: 8px; padding: 7px 11px; }
+.toast {
+  position: fixed; bottom: 22px; right: 22px; max-width: 350px;
+  background: var(--dark); color: white; padding: 14px 18px;
+  border-radius: 10px; box-shadow: var(--shadow); z-index: 100;
+}
+@media (max-width: 800px) {
+  .services { grid-template-columns: repeat(2,minmax(0,1fr)); }
+  .hero { grid-template-columns: 1fr; padding: 25px; }
+  .hero-visual { display: none; }
+}
+@media (max-width: 560px) {
+  .topbar { padding: 12px 15px; flex-wrap: wrap; }
+  .brand { font-size: 1.15rem; }
+  .top-actions { gap: 6px; }
+  .top-actions .btn { padding: 8px 10px; font-size: .82rem; }
+  .user-label { display: none; }
+  main { padding: 20px 13px 35px; }
+  .stats { grid-template-columns: 1fr; }
+  .services { gap: 10px; }
+  .service { padding: 15px; }
+  .sos-panel { grid-template-columns: 1fr; text-align: center; }
+  .sos-button { width: 108px; height: 108px; }
+  .form-grid { grid-template-columns: 1fr; gap: 0; }
+  .card { padding: 16px; }
+}
+</style>
+</head>
+
+<body>
+<header class="topbar">
+  <div class="brand"><i class="fa-solid fa-car-burst"></i> RoadAssist</div>
+  <div class="top-actions">
+    <span class="user-label" id="userLabel">Guest mode</span>
+    <button class="btn btn-outline" id="authButton" onclick="openAuth()">
+      <i class="fa-regular fa-user"></i> Sign in
+    </button>
+    <button class="btn btn-primary" onclick="scrollToSection('servicesSection')">
+      Get help
+    </button>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div>
+      <div class="eyebrow">YOUR JOURNEY. OUR PRIORITY.</div>
+      <h1>Stranded on the road?<br>We've got your back.</h1>
+      <p>Request roadside assistance for common vehicle problems. Record your request and keep your emergency contacts close at hand.</p>
+      <button class="btn btn-primary" onclick="scrollToSection('sosSection')">
+        <i class="fa-solid fa-life-ring"></i> Get emergency help
+      </button>
+    </div>
+    <div class="hero-visual">
+      <i class="fa-solid fa-truck-pickup"></i>
+      <small>Roadside support, made simple</small>
+    </div>
+  </section>
+
+  <section class="grid stats">
+    <div class="card">
+      <span class="stat-icon"><i class="fa-solid fa-clipboard-list"></i></span>
+      <div class="muted small">Total requests</div>
+      <div class="stat-value" id="totalStat">0</div>
+    </div>
+    <div class="card">
+      <span class="stat-icon"><i class="fa-solid fa-clock"></i></span>
+      <div class="muted small">Active requests</div>
+      <div class="stat-value" id="activeStat">0</div>
+    </div>
+    <div class="card">
+      <span class="stat-icon"><i class="fa-solid fa-address-book"></i></span>
+      <div class="muted small">Saved contacts</div>
+      <div class="stat-value" id="contactsStat">0</div>
+    </div>
+  </section>
+
+  <section class="section card sos-panel" id="sosSection">
+    <div>
+      <div class="eyebrow">EMERGENCY ASSISTANCE</div>
+      <h2>Need urgent roadside help?</h2>
+      <p class="muted">Create an emergency assistance request and attach your current location if you allow location access.</p>
+      <div class="location-line">
+        <i class="fa-solid fa-location-dot"></i>
+        <span id="locationText">Checking location permission...</span>
+      </div>
+      <button class="btn btn-light btn-small" onclick="getLocation(true)" style="margin-top:10px">
+        <i class="fa-solid fa-crosshairs"></i> Refresh location
+      </button>
+    </div>
+    <button class="sos-button" onclick="triggerSOS()" aria-label="Create emergency request">SOS</button>
+  </section>
+
+  <section class="section" id="servicesSection">
+    <div class="section-heading">
+      <div>
+        <h2>Roadside services</h2>
+        <div class="muted small">Choose the type of assistance you need.</div>
+      </div>
+    </div>
+    <div class="grid services">
+      <button class="service" onclick="requestService('Towing')">
+        <span class="stat-icon"><i class="fa-solid fa-truck-pickup"></i></span>
+        <strong>Towing service</strong>
+        <p>Vehicle breakdown or recovery</p>
+      </button>
+      <button class="service" onclick="requestService('Fuel Delivery')">
+        <span class="stat-icon"><i class="fa-solid fa-gas-pump"></i></span>
+        <strong>Fuel delivery</strong>
+        <p>Running low on fuel</p>
+      </button>
+      <button class="service" onclick="requestService('Flat Tire')">
+        <span class="stat-icon"><i class="fa-solid fa-compact-disc"></i></span>
+        <strong>Flat tire</strong>
+        <p>Tire change assistance</p>
+      </button>
+      <button class="service" onclick="requestService('Battery Jump')">
+        <span class="stat-icon"><i class="fa-solid fa-car-battery"></i></span>
+        <strong>Battery help</strong>
+        <p>Jump-start assistance</p>
+      </button>
+    </div>
+  </section>
+
+  <section class="section grid" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:18px">
+    <div class="card">
+      <div class="section-heading">
+        <h2><i class="fa-solid fa-user-shield"></i> Emergency contacts</h2>
+      </div>
+      <p class="muted small">Save people you may need to contact in an emergency. This demo stores contacts in this browser only.</p>
+      <form id="contactForm">
+        <div class="field">
+          <label for="contactName">Contact name</label>
+          <input id="contactName" required maxlength="80" placeholder="e.g. Family member">
+        </div>
+        <div class="field">
+          <label for="contactPhone">Phone number</label>
+          <input id="contactPhone" type="tel" required maxlength="20"
+            pattern="[+0-9() -]{7,20}" placeholder="+91 98765 43210">
+        </div>
+        <button class="btn btn-dark" type="submit">
+          <i class="fa-solid fa-plus"></i> Save contact
+        </button>
+      </form>
+      <div class="contact-list" id="contactList" style="margin-top:15px"></div>
+    </div>
+
+    <div class="card">
+      <div class="section-heading">
+        <h2><i class="fa-solid fa-car"></i> Request details</h2>
+      </div>
+      <p class="muted small">Add optional vehicle and problem details to your next request.</p>
+      <form id="detailsForm">
+        <div class="field">
+          <label for="vehicle">Vehicle</label>
+          <input id="vehicle" maxlength="80" placeholder="e.g. Hyundai i20">
+        </div>
+        <div class="field">
+          <label for="vehicleNumber">Vehicle registration (optional)</label>
+          <input id="vehicleNumber" maxlength="20" placeholder="e.g. TS 09 AB 1234">
+        </div>
+        <div class="field">
+          <label for="problem">Additional details</label>
+          <textarea id="problem" maxlength="500" placeholder="Describe the problem or nearby landmark"></textarea>
+        </div>
+        <button class="btn btn-dark" type="submit">
+          <i class="fa-solid fa-floppy-disk"></i> Save details
+        </button>
+        <div class="muted small" id="detailsStatus" style="margin-top:8px">No vehicle details saved.</div>
+      </form>
+    </div>
+  </section>
+
+  <section class="section card" id="historySection">
+    <div class="section-heading">
+      <div>
+        <h2>Request history</h2>
+        <div class="muted small">Review requests created in this browser.</div>
+      </div>
+      <button class="btn btn-light btn-small" onclick="exportHistory()">
+        <i class="fa-solid fa-download"></i> Export CSV
+      </button>
+    </div>
+    <div class="toolbar" style="margin-bottom:15px">
+      <input id="historySearch" placeholder="Search service or request ID..." aria-label="Search request history">
+      <select id="historyFilter" aria-label="Filter request status">
+        <option value="all">All statuses</option>
+        <option value="Recorded">Recorded</option>
+        <option value="Completed">Completed</option>
+        <option value="Cancelled">Cancelled</option>
+      </select>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Request</th><th>Service</th><th>Date & time</th>
+            <th>Status</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="historyBody"></tbody>
+      </table>
+    </div>
+    <div class="empty hidden" id="emptyHistory">
+      <i class="fa-solid fa-folder-open" style="font-size:2rem"></i>
+      <p>No matching requests found.</p>
+    </div>
+    <p class="muted small" style="margin-bottom:0">
+      "Recorded" means saved locally. It does not mean a mechanic has been dispatched.
+    </p>
+  </section>
+</main>
+
+<footer class="footer">
+  <strong>RoadAssist</strong> · A roadside assistance demo project<br>
+  For a real emergency, contact your local emergency services or a verified roadside provider.
+</footer>
+
+<!-- Sign in / sign up modal -->
+<div class="modal hidden" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h2 id="authTitle">Sign in</h2>
+      <button class="close-btn" onclick="closeAuth()" aria-label="Close">✕</button>
+    </div>
+    <p class="muted small" id="authDescription">Enter your demo account details.</p>
+    <form id="authForm">
+      <div class="field">
+        <label for="authName">Name (sign up only)</label>
+        <input id="authName" maxlength="80" autocomplete="name" placeholder="Your name">
+      </div>
+      <div class="field">
+        <label for="authEmail">Email</label>
+        <input id="authEmail" type="email" required maxlength="120"
+          autocomplete="email" placeholder="you@example.com">
+      </div>
+      <div class="field">
+        <label for="authPassword">Password</label>
+        <input id="authPassword" type="password" required minlength="6"
+          maxlength="100" autocomplete="current-password" placeholder="At least 6 characters">
+      </div>
+      <button class="btn btn-primary" id="authSubmit" type="submit" style="width:100%">Sign in</button>
+    </form>
+    <p class="small" style="margin-bottom:0">
+      <span id="authSwitchText">New to RoadAssist?</span>
+      <button class="btn btn-light btn-small" onclick="switchAuth()" id="authSwitch">Create account</button>
+    </p>
+    <div class="notice">Demo only: account data is stored in this browser, not a secure server. Do not use a real password.</div>
+  </div>
+</div>
+
+<div class="modal hidden" id="requestModal" role="dialog" aria-modal="true" aria-labelledby="requestTitle">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h2 id="requestTitle">Confirm request</h2>
+      <button class="close-btn" onclick="closeRequest()" aria-label="Close">✕</button>
+    </div>
+    <p class="muted small">Review the details before recording this request.</p>
+    <form id="requestForm">
+      <div class="field">
+        <label for="requestService">Service</label>
+        <select id="requestService">
+          <option>Emergency Assistance</option>
+          <option>Towing</option>
+          <option>Fuel Delivery</option>
+          <option>Flat Tire</option>
+          <option>Battery Jump</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="requestNotes">Problem or nearby landmark</label>
+        <textarea id="requestNotes" maxlength="500" placeholder="Add any helpful details"></textarea>
+      </div>
+      <p class="muted small" id="requestLocation"></p>
+      <button class="btn btn-primary" type="submit" style="width:100%">
+        <i class="fa-solid fa-clipboard-check"></i> Record request
+      </button>
+      <button class="btn btn-light" type="button" onclick="closeRequest()" style="width:100%;margin-top:8px">Cancel</button>
+    </form>
+    <div class="notice">This records a demo request only. It does not contact mechanics or send an SMS.</div>
+  </div>
+</div>
+
+<div class="toast hidden" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+
+const STORAGE = {
+  contacts: "roadassist_contacts_v1",
+  requests: "roadassist_requests_v1",
+  details: "roadassist_details_v1",
+  accounts: "roadassist_demo_accounts_v1",
+  session: "roadassist_demo_session_v1"
+};
+
+let currentLocation = null;
+let pendingService = "Emergency Assistance";
+let authMode = "login";
+let toastTimer = null;
+
+function readData(key, fallback) {
+  try {
+    const value = localStorage.getItem(key);
+    return value === null ? fallback : JSON.parse(value);
+  } catch (error) {
+    console.warn("Could not read browser storage:", error);
+    return fallback;
+  }
+}
+
+function saveData(key, value) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+    return true;
+  } catch (error) {
+    showToast("Could not save data. Check browser storage settings.");
+    return false;
+  }
+}
+
+function showToast(message) {
+  const toast = document.getElementById("toast");
+  toast.textContent = message;
+  toast.classList.remove("hidden");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.add("hidden"), 3500);
+}
+
+function scrollToSection(id) {
+  document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+}
+
+function getLocation(showMessage = false) {
+  const label = document.getElementById("locationText");
+
+  if (!navigator.geolocation) {
+    currentLocation = null;
+    label.textContent = "Location is not supported by this browser.";
+    if (showMessage) showToast("Your browser does not support geolocation.");
+    return;
+  }
+
+  label.textContent = "Requesting location permission...";
+  navigator.geolocation.getCurrentPosition(
+    position => {
+      currentLocation = {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+        accuracy: Math.round(position.coords.accuracy)
+      };
+      label.textContent =
+        currentLocation.latitude.toFixed(5) + ", " +
+        currentLocation.longitude.toFixed(5) +
+        " (accuracy about " + currentLocation.accuracy + " m)";
+      if (showMessage) showToast("Location updated.");
+    },
+    error => {
+      currentLocation = null;
+      const messages = {
+        1: "Location permission denied. You can still record a request.",
+        2: "Location is currently unavailable.",
+        3: "Location request timed out."
+      };
+      label.textContent = messages[error.code] || "Unable to get your location.";
+      if (showMessage) showToast(label.textContent);
+    },
+    { enableHighAccuracy: true, timeout: 12000, maximumAge: 60000 }
+  );
+}
+
+function getContacts() {
+  const data = readData(STORAGE.contacts, []);
+  return Array.isArray(data) ? data : [];
+}
+
+function getRequests() {
+  const data = readData(STORAGE.requests, []);
+  return Array.isArray(data) ? data : [];
+}
+
+function getCurrentUser() {
+  return readData(STORAGE.session, null);
+}
+
+function updateAuthUI() {
+  const user = getCurrentUser();
+  document.getElementById("userLabel").textContent =
+    user ? "Hello, " + user.name : "Guest mode";
+
+  const button = document.getElementById("authButton");
+  button.innerHTML = user
+    ? '<i class="fa-solid fa-right-from-bracket"></i> Sign out'
+    : '<i class="fa-regular fa-user"></i> Sign in';
+  button.onclick = user ? signOut : openAuth;
+}
+
+function openAuth() {
+  authMode = "login";
+  updateAuthModal();
+  document.getElementById("authModal").classList.remove("hidden");
+  document.getElementById("authEmail").focus();
+}
+
+function closeAuth() {
+  document.getElementById("authModal").classList.add("hidden");
+  document.getElementById("authForm").reset();
+}
+
+function switchAuth() {
+  authMode = authMode === "login" ? "signup" : "login";
+  updateAuthModal();
+}
+
+function updateAuthModal() {
+  const signup = authMode === "signup";
+  document.getElementById("authTitle").textContent =
+    signup ? "Create your account" : "Sign in";
+  document.getElementById("authDescription").textContent =
+    signup ? "Create a local demo account." : "Sign in to your local demo account.";
+  document.getElementById("authName").required = signup;
+  document.getElementById("authName").parentElement.classList.toggle("hidden", !signup);
+  document.getElementById("authPassword").autocomplete =
+    signup ? "new-password" : "current-password";
+  document.getElementById("authSubmit").textContent =
+    signup ? "Create account" : "Sign in";
+  document.getElementById("authSwitchText").textContent =
+    signup ? "Already registered?" : "New to RoadAssist?";
+  document.getElementById("authSwitch").textContent =
+    signup ? "Sign in instead" : "Create account";
+}
+
+document.getElementById("authForm").addEventListener("submit", event => {
+  event.preventDefault();
+  const name = document.getElementById("authName").value.trim();
+  const email = document.getElementById("authEmail").value.trim().toLowerCase();
+  const password = document.getElementById("authPassword").value;
+
+  let accounts = readData(STORAGE.accounts, []);
+  if (!Array.isArray(accounts)) accounts = [];
+
+  if (authMode === "signup") {
+    if (!name) return showToast("Please enter your name.");
+    if (accounts.some(account => account.email === email)) {
+      return showToast("An account with this email already exists.");
+    }
+
+    // INSECURE DEMO ONLY: never store passwords like this in a real app.
+    accounts.push({ name, email, password });
+    if (!saveData(STORAGE.accounts, accounts)) return;
+    saveData(STORAGE.session, { name, email });
+    closeAuth();
+    updateAuthUI();
+    showToast("Demo account created successfully.");
+  } else {
+    const account = accounts.find(
+      item => item.email === email && item.password === password
+    );
+    if (!account) return showToast("Incorrect demo credentials. Check your account.");
+
+    saveData(STORAGE.session, { name: account.name, email: account.email });
+    closeAuth();
+    updateAuthUI();
+    showToast("Signed in to demo mode.");
+  }
+});
+
+function signOut() {
+  localStorage.removeItem(STORAGE.session);
+  updateAuthUI();
+  showToast("Signed out.");
+}
+
+function saveContact(event) {
+  event.preventDefault();
+  const name = document.getElementById("contactName").value.trim();
+  const phone = document.getElementById("contactPhone").value.trim();
+
+  if (name.length < 2) return showToast("Enter a valid contact name.");
+  if (!/^[+0-9() -]{7,20}$/.test(phone)) {
+    return showToast("Enter a valid phone number.");
+  }
+
+  const contacts = getContacts();
+  contacts.push({
+    id: makeId("C"),
+    name,
+    phone,
+    createdAt: new Date().toISOString()
+  });
+
+  if (!saveData(STORAGE.contacts, contacts)) return;
+  document.getElementById("contactForm").reset();
+  renderContacts();
+  updateStats();
+  showToast("Emergency contact saved in this browser.");
+}
+
+function makeId(prefix) {
+  return prefix + "-" + Date.now().toString(36).toUpperCase() +
+    "-" + Math.random().toString(36).slice(2, 6).toUpperCase();
+}
+
+function renderContacts() {
+  const list = document.getElementById("contactList");
+  const contacts = getContacts();
+  list.replaceChildren();
+
+  if (!contacts.length) {
+    const p = document.createElement("p");
+    p.className = "muted small";
+    p.textContent = "No emergency contacts saved yet.";
+    list.appendChild(p);
+    return;
+  }
+
+  contacts.forEach(contact => {
+    const row = document.createElement("div");
+    row.className = "contact-row";
+
+    const info = document.createElement("div");
+    const title = document.createElement("strong");
+    const phone = document.createElement("p");
+    title.textContent = contact.name;
+    phone.textContent = contact.phone;
+    info.append(title, phone);
+
+    const remove = document.createElement("button");
+    remove.className = "btn btn-light btn-small";
+    remove.textContent = "Remove";
+    remove.onclick = () => removeContact(contact.id);
+
+    row.append(info, remove);
+    list.appendChild(row);
+  });
+}
+
+function removeContact(id) {
+  if (!confirm("Remove this emergency contact?")) return;
+  const updated = getContacts().filter(contact => contact.id !== id);
+  if (!saveData(STORAGE.contacts, updated)) return;
+  renderContacts();
+  updateStats();
+  showToast("Contact removed.");
+}
+
+function saveVehicleDetails(event) {
+  event.preventDefault();
+  const details = {
+    vehicle: document.getElementById("vehicle").value.trim(),
+    vehicleNumber: document.getElementById("vehicleNumber").value.trim(),
+    problem: document.getElementById("problem").value.trim()
+  };
+
+  if (!saveData(STORAGE.details, details)) return;
+  document.getElementById("detailsStatus").textContent =
+    details.vehicle || details.vehicleNumber || details.problem
+      ? "Vehicle details saved in this browser."
+      : "No vehicle details saved.";
+  showToast("Vehicle details saved.");
+}
+
+function loadVehicleDetails() {
+  const d = readData(STORAGE.details, {});
+  document.getElementById("vehicle").value = d.vehicle || "";
+  document.getElementById("vehicleNumber").value = d.vehicleNumber || "";
+  document.getElementById("problem").value = d.problem || "";
+  document.getElementById("detailsStatus").textContent =
+    d.vehicle || d.vehicleNumber || d.problem
+      ? "Vehicle details saved in this browser."
+      : "No vehicle details saved.";
+}
+
+function requestService(service) {
+  pendingService = service;
+  openRequestModal();
+}
+
+function triggerSOS() {
+  if (!confirm("Create an emergency assistance request? This demo will not contact emergency services or dispatch a mechanic.")) {
+    return;
+  }
+
+  // Ask for a fresh location before opening the confirmation form.
+  if (!navigator.geolocation) {
+    currentLocation = null;
+    openRequestModal("Emergency Assistance");
+    return;
+  }
+
+  showToast("Checking location...");
+  navigator.geolocation.getCurrentPosition(
+    position => {
+      currentLocation = {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+        accuracy: Math.round(position.coords.accuracy)
+      };
+      document.getElementById("locationText").textContent =
+        currentLocation.latitude.toFixed(5) + ", " +
+        currentLocation.longitude.toFixed(5) +
+        " (accuracy about " + currentLocation.accuracy + " m)";
+      openRequestModal("Emergency Assistance");
+    },
+    () => {
+      currentLocation = null;
+      openRequestModal("Emergency Assistance");
+      showToast("Location unavailable. You can still record the request.");
+    },
+    { enableHighAccuracy: true, timeout: 10000, maximumAge: 30000 }
+  );
+}
+
+function openRequestModal(service = pendingService) {
+  pendingService = service;
+  document.getElementById("requestTitle").textContent =
+    service === "Emergency Assistance" ? "Emergency request" : "Request " + service;
+  document.getElementById("requestService").value = service;
+  const details = readData(STORAGE.details, {});
+  document.getElementById("requestNotes").value = details.problem || "";
+  document.getElementById("requestLocation").textContent = currentLocation
+    ? "Location: " + currentLocation.latitude.toFixed(5) + ", " +
+      currentLocation.longitude.toFixed(5)
+    : "Location not attached. You can still record your request.";
+  document.getElementById("requestModal").classList.remove("hidden");
+}
+
+function closeRequest() {
+  document.getElementById("requestModal").classList.add("hidden");
+}
+
+function recordRequest(event) {
+  event.preventDefault();
+  const service = document.getElementById("requestService").value;
+  const notes = document.getElementById("requestNotes").value.trim();
+  const vehicle = readData(STORAGE.details, {});
+
+  const request = {
+    id: makeId("RA"),
+    service,
+    notes,
+    vehicle: vehicle.vehicle || "",
+    vehicleNumber: vehicle.vehicleNumber || "",
+    location: currentLocation ? { ...currentLocation } : null,
+    status: "Recorded",
+    createdAt: new Date().toISOString()
+  };
+
+  const requests = getRequests();
+  requests.unshift(request);
+  if (!saveData(STORAGE.requests, requests)) return;
+
+  closeRequest();
+  renderHistory();
+  updateStats();
+  showToast("Request " + request.id + " recorded locally. No provider has been notified.");
+  scrollToSection("historySection");
+}
+
+function changeRequestStatus(id, status) {
+  const requests = getRequests();
+  const request = requests.find(item => item.id === id);
+  if (!request) return;
+
+  if (status === "Cancelled" &&
+      !confirm("Cancel this locally recorded request?")) return;
+
+  request.status = status;
+  if (!saveData(STORAGE.requests, requests)) return;
+  renderHistory();
+  updateStats();
+  showToast("Request status updated to " + status + ".");
+}
+
+function formatDate(value) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "Unknown date";
+  return date.toLocaleString();
+}
+
+function renderHistory() {
+  const tbody = document.getElementById("historyBody");
+  const empty = document.getElementById("emptyHistory");
+  tbody.replaceChildren();
+
+  const search = document.getElementById("historySearch").value.trim().toLowerCase();
+  const filter = document.getElementById("historyFilter").value;
+
+  const filtered = getRequests().filter(request => {
+    const matchesSearch =
+      (request.service || "").toLowerCase().includes(search) ||
+      (request.id || "").toLowerCase().includes(search) ||
+      (request.notes || "").toLowerCase().includes(search);
+    return matchesSearch && (filter === "all" || request.status === filter);
+  });
+
+  empty.classList.toggle("hidden", filtered.length > 0);
+
+  filtered.forEach(request => {
+    const tr = document.createElement("tr");
+    const values = [
+      request.id,
+      request.service,
+      formatDate(request.createdAt)
+    ];
+
+    values.forEach(value => {
+      const td = document.createElement("td");
+      td.textContent = value || "—";
+      tr.appendChild(td);
+    });
+
+    const statusCell = document.createElement("td");
+    const badge = document.createElement("span");
+    badge.className = "status" +
+      (request.status === "Cancelled" ? " cancelled" :
+       request.status === "Completed" ? " completed" : "");
+    badge.textContent = request.status;
+    statusCell.appendChild(badge);
+    tr.appendChild(statusCell);
+
+    const actions = document.createElement("td");
+    if (request.status === "Recorded") {
+      const complete = document.createElement("button");
+      complete.className = "btn btn-dark btn-small";
+      complete.textContent = "Complete";
+      complete.onclick = () => changeRequestStatus(request.id, "Completed");
+
+      const cancel = document.createElement("button");
+      cancel.className = "btn btn-light btn-small";
+      cancel.textContent = "Cancel";
+      cancel.style.marginLeft = "5px";
+      cancel.onclick = () => changeRequestStatus(request.id, "Cancelled");
+
+      actions.append(complete, cancel);
+    } else {
+      actions.textContent = "—";
+    }
+    tr.appendChild(actions);
+    tbody.appendChild(tr);
+  });
+}
+
+function updateStats() {
+  const requests = getRequests();
+  document.getElementById("totalStat").textContent = requests.length;
+  document.getElementById("activeStat").textContent =
+    requests.filter(item => item.status === "Recorded").length;
+  document.getElementById("contactsStat").textContent = getContacts().length;
+}
+
+function csvEscape(value) {
+  return '"' + String(value ?? "").replace(/"/g, '""') + '"';
+}
+
+function exportHistory() {
+  const requests = getRequests();
+  if (!requests.length) return showToast("There is no history to export.");
+
+  const rows = [
+    ["Request ID", "Service", "Date", "Status", "Vehicle",
+     "Registration", "Notes", "Latitude", "Longitude"],
+    ...requests.map(r => [
+      r.id, r.service, formatDate(r.createdAt), r.status,
+      r.vehicle, r.vehicleNumber, r.notes,
+      r.location?.latitude ?? "", r.location?.longitude ?? ""
+    ])
+  ];
+
+  const csv = rows.map(row => row.map(csvEscape).join(",")).join("\r\n");
+  const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "roadassist-history.csv";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+  showToast("Request history exported.");
+}
+
+document.getElementById("contactForm").addEventListener("submit", saveContact);
+document.getElementById("detailsForm").addEventListener("submit", saveVehicleDetails);
+document.getElementById("requestForm").addEventListener("submit", recordRequest);
+document.getElementById("historySearch").addEventListener("input", renderHistory);
+document.getElementById("historyFilter").addEventListener("change", renderHistory);
+
+document.getElementById("authModal").addEventListener("click", event => {
+  if (event.target.id === "authModal") closeAuth();
+});
+document.getElementById("requestModal").addEventListener("click", event => {
+  if (event.target.id === "requestModal") closeRequest();
+});
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") {
+    closeAuth();
+    closeRequest();
+  }
+});
+
+function init() {
+  renderContacts();
+  renderHistory();
+  updateStats();
+  updateAuthUI();
+  loadVehicleDetails();
+  getLocation();
+}
+
+init();
+</script>
+</body>
+</html>
